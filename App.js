@@ -3,15 +3,21 @@ import { View, Text, StyleSheet } from 'react-native';
 import firebase from 'firebase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import rootReducer from './redux/reducers';
+import thunk from 'redux-thunk';
 import Landing from './components/auth/Landing';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import Main from './components/Main';
 
-const CONFIG = require('./config.js');
+const Config = require('./config.js');
 const Stack = createStackNavigator();
+const Store = createStore(rootReducer, applyMiddleware(thunk));
 
 if (firebase.apps.length === 0) {
-  firebase.initializeApp(CONFIG.firebaseConfig);
+  firebase.initializeApp(Config.firebaseConfig);
 }
 
 function HomeScreen() {
@@ -64,25 +70,24 @@ export class App extends Component {
               component={Landing}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name='Register'
-              component={Register}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='Login'
-              component={Login}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen name='Home' component={HomeScreen} />
+            <Stack.Screen name='Register' component={Register} />
+            <Stack.Screen name='Login' component={Login} />
           </Stack.Navigator>
         </NavigationContainer>
       );
     }
     return (
-      <View style={styles.loading}>
-        <Text>User is Logged In</Text>
-      </View>
+      <Provider store={Store}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName='Main'>
+            <Stack.Screen
+              name='Main'
+              component={Main}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
     );
   }
 }
