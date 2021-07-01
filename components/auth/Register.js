@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { View, Button, TextInput } from "react-native";
-import firebase from "firebase";
+import React, { Component } from 'react';
+import { View, Button, TextInput } from 'react-native';
+import firebase from 'firebase';
 
 export default class Register extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: "",
-      password: "",
-      firstName: "",
-      lastName: "",
+      email: '',
+      password: '',
+      firstName: '',
+      lastName: '',
     };
 
     this.onSingUp = this.onSingUp.bind(this);
@@ -25,7 +25,7 @@ export default class Register extends Component {
       .then((result) => {
         firebase
           .firestore()
-          .collection("users")
+          .collection('users')
           .doc(firebase.auth().currentUser.uid)
           .set({
             firstName,
@@ -43,25 +43,25 @@ export default class Register extends Component {
     return (
       <View>
         <TextInput
-          placeholder="First Name"
+          placeholder='First Name'
           onChangeText={(firstName) => this.setState({ firstName })}
         />
         <TextInput
-          placeholder="Last Name"
+          placeholder='Last Name'
           onChangeText={(lastName) => this.setState({ lastName })}
         />
         <TextInput
-          placeholder="Email"
+          placeholder='Email'
           onChangeText={(email) => this.setState({ email })}
         />
         <TextInput
-          placeholder="Password"
-          textContentType="password"
+          placeholder='Password'
+          textContentType='password'
           secureTextEntry={true}
           onChangeText={(password) => this.setState({ password })}
         />
 
-        <Button onPress={() => this.onSingUp()} title="Sign Up" />
+        <Button onPress={() => this.onSingUp()} title='Sign Up' />
       </View>
     );
   }
